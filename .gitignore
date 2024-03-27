@@ -21,6 +21,7 @@ target/
 .mvn
 mvnw
 mvnw.cmd
+import.sql
 
 ### NetBeans ###
 /nbproject/private/
