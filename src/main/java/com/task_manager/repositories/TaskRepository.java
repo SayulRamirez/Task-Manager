@@ -15,4 +15,9 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     """)
     TaskEntity findTaskByIdAndIdAuthor(Long idTask, Long idAuthor);
 
+    @Query("""
+    select t from TaskEntity  t where t.author.id =:id
+    """)
+    List<TaskEntity> findAllById(Long id);
+
 }

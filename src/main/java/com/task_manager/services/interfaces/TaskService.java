@@ -21,4 +21,11 @@ public interface TaskService {
      * @return Task
      */
     Task updateTask(UpdateTask updateTask);
+
+    /**
+     * Find all task by id author
+     * @param id {@link Long}
+     * @return Things to do
+     */
+    List<Task> findAll(Long id);
 }
