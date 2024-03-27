@@ -2,17 +2,18 @@ package com.task_manager.controllers;
 
 import com.task_manager.domain.NewTask;
 import com.task_manager.domain.Task;
+import com.task_manager.domain.UpdateTask;
 import com.task_manager.services.TaskServiceImpl;
 import com.task_manager.services.interfaces.TaskService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/task")
@@ -25,6 +26,7 @@ public class TaskController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<Task> createTask(@Valid @RequestBody NewTask newTask) {
 
         Task task = taskService.createTask(newTask);
@@ -33,4 +35,14 @@ public class TaskController {
 
         return ResponseEntity.created(location).body(task);
     }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity<Task> updateTask(@Valid @RequestBody UpdateTask updateTask) {
+
+        Task task = taskService.updateTask(updateTask);
+
+        return ResponseEntity.ok(task);
+    }
+
 }
