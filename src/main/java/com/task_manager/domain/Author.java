@@ -1,4 +1,7 @@
 package com.task_manager.domain;
 
-public record Author() {
+public record Author(
+        Long id,
+        String nick
+) {
 }
