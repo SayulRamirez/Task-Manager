@@ -1,6 +1,7 @@
 package com.task_manager.controllers;
 
 import com.task_manager.exceptions.AuthorNotFound;
+import com.task_manager.exceptions.TaskNotFound;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -23,7 +24,7 @@ public class RestResponseEntityExceptionHandler
         extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthorNotFound.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> handlerAuthorNotFound(RuntimeException e) {
 
         Map<String, Object> response = new LinkedHashMap<>();
@@ -57,5 +58,18 @@ public class RestResponseEntityExceptionHandler
         response.put("timestamp: ", LocalDateTime.now());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(TaskNotFound.class)
+    public Map<String, Object> handleTaskNotFound(RuntimeException e) {
+
+        Map<String, Object> response = new LinkedHashMap<>();
+
+        response.put("timestamp", LocalDateTime.now());
+        response.put("error", HttpStatus.NOT_FOUND);
+        response.put("message", e.getMessage());
+
+        return response;
     }
 }
