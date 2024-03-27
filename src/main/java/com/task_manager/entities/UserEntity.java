@@ -1,14 +1,18 @@
 package com.task_manager.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 
-@Data
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class UserEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +26,5 @@ public class User implements Serializable {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_author_user"))
-    private Author author;
+    private AuthorEntity author;
 }

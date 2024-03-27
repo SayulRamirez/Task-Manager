@@ -2,12 +2,16 @@ package com.task_manager.entities;
 
 import com.task_manager.enums.Status;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Data
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @Entity
 @Table(name = "tasks")
 public class TaskEntity implements Serializable {
@@ -31,6 +35,10 @@ public class TaskEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_author_task"), nullable = false)
-    private Author author;
+    private AuthorEntity author;
 
+    @PrePersist
+    private void prePersist() {
+        this.status = Status.PENDIENTE;
+    }
 }

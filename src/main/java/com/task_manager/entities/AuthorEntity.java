@@ -1,16 +1,20 @@
 package com.task_manager.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @Entity
 @Table(name = "authors")
-public class Author implements Serializable {
+public class AuthorEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
