@@ -1,4 +1,10 @@
 package com.task_manager.repositories;
 
-public interface AuthorRepository {
+import com.task_manager.entities.AuthorEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AuthorRepository extends JpaRepository<AuthorEntity, Long> {
+
 }
