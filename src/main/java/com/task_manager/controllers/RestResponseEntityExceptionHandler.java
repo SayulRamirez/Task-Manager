@@ -30,7 +30,7 @@ public class RestResponseEntityExceptionHandler
         Map<String, Object> response = new LinkedHashMap<>();
 
         response.put("message: ", e.getMessage());
-        response.put("Error: ", HttpStatus.BAD_REQUEST.toString());
+        response.put("Error: ", HttpStatus.NOT_FOUND.toString());
         response.put("timestamp: ", LocalDateTime.now());
 
         return response;
