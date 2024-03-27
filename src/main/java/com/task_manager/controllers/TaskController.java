@@ -45,4 +45,12 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<Task>> findAllTask(@NotNull(message = "Author id required") @PathVariable Long id) {
+
+        List<Task> tasks = taskService.findAll(id);
+
+        return ResponseEntity.ok(tasks);
+    }
+
 }
