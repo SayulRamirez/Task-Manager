@@ -1,6 +1,7 @@
 package com.task_manager.controllers;
 
 import com.task_manager.exceptions.AuthorNotFound;
+import com.task_manager.exceptions.DuplicateDate;
 import com.task_manager.exceptions.TaskNotFound;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -69,6 +70,19 @@ public class RestResponseEntityExceptionHandler
         response.put("timestamp", LocalDateTime.now());
         response.put("error", HttpStatus.NOT_FOUND);
         response.put("message", e.getMessage());
+
+        return response;
+    }
+
+    @ExceptionHandler(DuplicateDate.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handlerDuplicateDate(RuntimeException e) {
+
+        Map<String, Object> response = new LinkedHashMap<>();
+
+        response.put("message: ", e.getMessage());
+        response.put("Error: ", HttpStatus.CONFLICT);
+        response.put("timestamp: ", LocalDateTime.now());
 
         return response;
     }
