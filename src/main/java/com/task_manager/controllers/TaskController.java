@@ -61,4 +61,13 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity<Void> deleteTask(@Valid @RequestBody OnlyTask onlyTask) {
+
+        taskService.deleteTask(onlyTask);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
