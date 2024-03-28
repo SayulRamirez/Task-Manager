@@ -1,9 +1,6 @@
 package com.task_manager.controllers;
 
-import com.task_manager.domain.NewTask;
-import com.task_manager.domain.OnlyTask;
-import com.task_manager.domain.Task;
-import com.task_manager.domain.UpdateTask;
+import com.task_manager.domain.*;
 import com.task_manager.services.TaskServiceImpl;
 import com.task_manager.services.interfaces.TaskService;
 import jakarta.transaction.Transactional;
@@ -41,6 +38,15 @@ public class TaskController {
     public ResponseEntity<Task> updateTask(@Valid @RequestBody UpdateTask updateTask) {
 
         Task task = taskService.updateTask(updateTask);
+
+        return ResponseEntity.ok(task);
+    }
+
+    @PutMapping("/status")
+    @Transactional
+    public ResponseEntity<Task> updateStatus(@Valid @RequestBody UpdateStatus updateStatus) {
+
+        Task task = taskService.updateStatus(updateStatus);
 
         return ResponseEntity.ok(task);
     }
