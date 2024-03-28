@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
@@ -25,4 +24,9 @@ public class AuthorEntity implements Serializable {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
     private List<TaskEntity> tasks = new ArrayList<>();
+
+    public AuthorEntity(Long id, String nick) {
+        this.id = id;
+        this.nick = nick;
+    }
 }
