@@ -1,13 +1,13 @@
 package com.task_manager.controllers;
 
 import com.task_manager.domain.NewTask;
+import com.task_manager.domain.OnlyTask;
 import com.task_manager.domain.Task;
 import com.task_manager.domain.UpdateTask;
 import com.task_manager.services.TaskServiceImpl;
 import com.task_manager.services.interfaces.TaskService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,11 +46,19 @@ public class TaskController {
     }
 
     @GetMapping("/all/{id}")
-    public ResponseEntity<List<Task>> findAllTask(@NotNull(message = "Author id required") @PathVariable Long id) {
+    public ResponseEntity<List<Task>> findAllTask(@PathVariable Long id) {
 
         List<Task> tasks = taskService.findAll(id);
 
         return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping
+    public ResponseEntity<Task> findOneTask(@Valid @RequestBody OnlyTask onlyTask) {
+
+        Task task = taskService.findByIdAuthor(onlyTask);
+
+        return ResponseEntity.ok(task);
     }
 
 }
