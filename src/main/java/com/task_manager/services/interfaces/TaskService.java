@@ -1,9 +1,6 @@
 package com.task_manager.services.interfaces;
 
-import com.task_manager.domain.NewTask;
-import com.task_manager.domain.OnlyTask;
-import com.task_manager.domain.Task;
-import com.task_manager.domain.UpdateTask;
+import com.task_manager.domain.*;
 
 import java.util.List;
 
@@ -22,6 +19,13 @@ public interface TaskService {
      * @return Task
      */
     Task updateTask(UpdateTask updateTask);
+
+    /**
+     * Update status from task
+     * @param updateStatus {@link UpdateStatus}
+     * @return Task
+     */
+    Task updateStatus(UpdateStatus updateStatus);
 
     /**
      * Find all task by id author

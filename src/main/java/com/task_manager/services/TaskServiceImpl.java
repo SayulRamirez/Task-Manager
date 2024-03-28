@@ -82,6 +82,26 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Task updateStatus(UpdateStatus updateStatus) {
+        TaskEntity taskEntity = taskRepository.findTaskByIdAndIdAuthor(updateStatus.id_task(), updateStatus.id_author());
+
+        if (taskEntity == null) throw new TaskNotFound("No assignments were found with the author: " + updateStatus.id_author() + " and task: " + updateStatus.id_task());
+
+        taskEntity.setStatus(updateStatus.status());
+
+        taskRepository.save(taskEntity);
+
+        return new Task(
+                taskEntity.getId(),
+                taskEntity.getTitle(),
+                taskEntity.getDescription(),
+                taskEntity.getStatus(),
+                taskEntity.getStartDate(),
+                new Author(taskEntity.getAuthor().getId(), taskEntity.getAuthor().getNick())
+        );
+    }
+
+    @Override
     public List<Task> findAll(Long id) {
         List<TaskEntity> taskEntities = taskRepository.findAllById(id);
 
