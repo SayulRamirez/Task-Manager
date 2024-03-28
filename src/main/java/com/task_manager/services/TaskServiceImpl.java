@@ -116,4 +116,14 @@ public class TaskServiceImpl implements TaskService {
                 new Author(taskEntity.getAuthor().getId(), taskEntity.getAuthor().getNick())
         );
     }
+
+    @Override
+    public void deleteTask(OnlyTask onlyTask) {
+
+        TaskEntity taskEntity = taskRepository.findTaskByIdAndIdAuthor(onlyTask.id_task(), onlyTask.id_author());
+
+        if (taskEntity == null) throw new TaskNotFound("No assignments were found with the author: " + onlyTask.id_author() + " and task: " + onlyTask.id_task());
+
+        taskRepository.delete(taskEntity);
+    }
 }

@@ -32,8 +32,14 @@ public interface TaskService {
 
     /**
      * Find one task by id author
-     * @param id {@link Long}
+     * @param onlyTask {@link OnlyTask}
      * @return Task
      */
     Task findByIdAuthor(OnlyTask onlyTask);
+
+    /**
+     * Delete one task
+     * @param onlyTask {@link OnlyTask}
+     */
+    void deleteTask(OnlyTask onlyTask);
 }
