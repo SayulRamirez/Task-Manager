@@ -1,9 +1,6 @@
 package com.task_manager.services;
 
-import com.task_manager.domain.Author;
-import com.task_manager.domain.NewTask;
-import com.task_manager.domain.Task;
-import com.task_manager.domain.UpdateTask;
+import com.task_manager.domain.*;
 import com.task_manager.entities.AuthorEntity;
 import com.task_manager.entities.TaskEntity;
 import com.task_manager.exceptions.AuthorNotFound;
@@ -101,5 +98,22 @@ public class TaskServiceImpl implements TaskService {
                 new Author(taskEntity.getAuthor().getId(), taskEntity.getAuthor().getNick()))));
 
         return tasks;
+    }
+
+    @Override
+    public Task findByIdAuthor(OnlyTask onlyTask) {
+
+        TaskEntity taskEntity = taskRepository.findTaskByIdAndIdAuthor(onlyTask.id_task(), onlyTask.id_author());
+
+        if (taskEntity == null) throw new TaskNotFound("No assignments were found with the author: " + onlyTask.id_author() + " and task: " + onlyTask.id_task());
+
+        return new Task(
+                taskEntity.getId(),
+                taskEntity.getTitle(),
+                taskEntity.getDescription(),
+                taskEntity.getStatus(),
+                taskEntity.getStartDate(),
+                new Author(taskEntity.getAuthor().getId(), taskEntity.getAuthor().getNick())
+        );
     }
 }

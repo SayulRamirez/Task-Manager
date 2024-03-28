@@ -1,6 +1,7 @@
 package com.task_manager.services.interfaces;
 
 import com.task_manager.domain.NewTask;
+import com.task_manager.domain.OnlyTask;
 import com.task_manager.domain.Task;
 import com.task_manager.domain.UpdateTask;
 
@@ -28,4 +29,11 @@ public interface TaskService {
      * @return Things to do
      */
     List<Task> findAll(Long id);
+
+    /**
+     * Find one task by id author
+     * @param id {@link Long}
+     * @return Task
+     */
+    Task findByIdAuthor(OnlyTask onlyTask);
 }
