@@ -18,10 +18,12 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String SECRET_KEY = "242H2524K2KB342CVE43VFf54J54IIG8DIS42B84B3JGN8BB3OB35GF233J3VFW5DG35SCP52KVR421E2G364KH46B";
+
     public String getToken(UserDetails user) {
 
         return getToken(new HashMap<>(), user);
     }
+
 
     private String getToken(Map<String, Object> extraClaims, UserDetails user) {
 

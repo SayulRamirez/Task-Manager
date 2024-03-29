@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -21,12 +20,4 @@ public class AuthorEntity implements Serializable {
 
     @Column(length = 60, nullable = false, unique = true)
     private String nick;
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
-    private List<TaskEntity> tasks = new ArrayList<>();
-
-    public AuthorEntity(Long id, String nick) {
-        this.id = id;
-        this.nick = nick;
-    }
 }
