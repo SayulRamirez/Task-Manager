@@ -1,9 +1,14 @@
 package com.task_manager.entities;
 
+import com.task_manager.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 @EqualsAndHashCode
 @AllArgsConstructor
@@ -12,14 +17,14 @@ import java.io.Serializable;
 @Getter
 @Entity
 @Table(name = "users")
-public class UserEntity implements Serializable {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 50, nullable = false, unique = true, updatable = false)
-    private String email;
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -27,4 +32,32 @@ public class UserEntity implements Serializable {
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_author_user"))
     private AuthorEntity author;
+
+    @Enumerated(EnumType.STRING)
+    Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
