@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record NewUser(
+public record RegisterRequest(
 
         @Email(message = "Check the email, it must be valid")
         @NotNull(message = "The field cannot be empty")
