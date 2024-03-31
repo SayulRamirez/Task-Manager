@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
-public record NewTask(
+public record RegisterTask(
 
         @NotEmpty(message = "The field cannot be empty")
         @Size(min = 5, max = 50, message = "Must contain between 5 and 50 characters")

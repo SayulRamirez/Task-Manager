@@ -24,9 +24,9 @@ public class TaskController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Task> createTask(@Valid @RequestBody NewTask newTask) {
+    public ResponseEntity<TaskCreateResponse> createTask(@Valid @RequestBody RegisterTask registerTask) {
 
-        Task task = taskService.createTask(newTask);
+        TaskCreateResponse task = taskService.createTask(registerTask);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(task.id()).toUri();
 
@@ -35,43 +35,43 @@ public class TaskController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity<Task> updateTask(@Valid @RequestBody UpdateTask updateTask) {
+    public ResponseEntity<TaskResponse> updateTask(@Valid @RequestBody UpdateTask updateTask) {
 
-        Task task = taskService.updateTask(updateTask);
+        TaskResponse task = taskService.updateTask(updateTask);
 
         return ResponseEntity.ok(task);
     }
 
     @PutMapping("/status")
     @Transactional
-    public ResponseEntity<Task> updateStatus(@Valid @RequestBody UpdateStatus updateStatus) {
+    public ResponseEntity<TaskResponse> updateStatus(@Valid @RequestBody UpdateStatus updateStatus) {
 
-        Task task = taskService.updateStatus(updateStatus);
+        TaskResponse task = taskService.updateStatus(updateStatus);
 
         return ResponseEntity.ok(task);
     }
 
     @GetMapping("/all/{id}")
-    public ResponseEntity<List<Task>> findAllTask(@PathVariable Long id) {
+    public ResponseEntity<List<TaskResponse>> findAllTask(@PathVariable Long id) {
 
-        List<Task> tasks = taskService.findAll(id);
+        List<TaskResponse> tasks = taskService.findAll(id);
 
         return ResponseEntity.ok(tasks);
     }
 
     @GetMapping
-    public ResponseEntity<Task> findOneTask(@Valid @RequestBody OnlyTask onlyTask) {
+    public ResponseEntity<TaskResponse> findOneTask(@Valid @RequestBody SimpleTask simpleTask) {
 
-        Task task = taskService.findByIdAuthor(onlyTask);
+        TaskResponse task = taskService.findByIdAuthor(simpleTask);
 
         return ResponseEntity.ok(task);
     }
 
     @DeleteMapping
     @Transactional
-    public ResponseEntity<Void> deleteTask(@Valid @RequestBody OnlyTask onlyTask) {
+    public ResponseEntity<Void> deleteTask(@Valid @RequestBody SimpleTask simpleTask) {
 
-        taskService.deleteTask(onlyTask);
+        taskService.deleteTask(simpleTask);
 
         return ResponseEntity.noContent().build();
     }

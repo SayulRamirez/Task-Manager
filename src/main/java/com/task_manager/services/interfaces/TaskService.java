@@ -1,6 +1,7 @@
 package com.task_manager.services.interfaces;
 
 import com.task_manager.domain.*;
+import com.task_manager.domain.SimpleTask;
 
 import java.util.List;
 
@@ -8,42 +9,42 @@ public interface TaskService {
 
     /**
      * Create a new task
-     * @param newTask {@link NewTask}
+     * @param registerTask {@link RegisterTask}
      * @return Task
      */
-    Task createTask(NewTask newTask);
+    TaskCreateResponse createTask(RegisterTask registerTask);
 
     /**
      * Update a task
      * @param updateTask {@link UpdateTask}
      * @return Task
      */
-    Task updateTask(UpdateTask updateTask);
+    TaskResponse updateTask(UpdateTask updateTask);
 
     /**
      * Update status from task
      * @param updateStatus {@link UpdateStatus}
      * @return Task
      */
-    Task updateStatus(UpdateStatus updateStatus);
+    TaskResponse updateStatus(UpdateStatus updateStatus);
 
     /**
      * Find all task by id author
      * @param id {@link Long}
      * @return Things to do
      */
-    List<Task> findAll(Long id);
+    List<TaskResponse> findAll(Long id);
 
     /**
      * Find one task by id author
-     * @param onlyTask {@link OnlyTask}
+     * @param onlyTask {@link SimpleTask}
      * @return Task
      */
-    Task findByIdAuthor(OnlyTask onlyTask);
+    TaskResponse findByIdAuthor(SimpleTask onlyTask);
 
     /**
      * Delete one task
-     * @param onlyTask {@link OnlyTask}
+     * @param onlyTask {@link SimpleTask}
      */
-    void deleteTask(OnlyTask onlyTask);
+    void deleteTask(SimpleTask onlyTask);
 }

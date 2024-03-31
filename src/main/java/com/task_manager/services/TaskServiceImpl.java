@@ -27,24 +27,24 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task createTask(NewTask newTask) {
+    public TaskCreateResponse createTask(RegisterTask registerTask) {
 
-        AuthorEntity authorEntity = authorRepository.findById(newTask.id_author()).orElse(null);
+        AuthorEntity authorEntity = authorRepository.findById(registerTask.id_author()).orElse(null);
 
-        if (authorEntity == null) throw new AuthorNotFound("Author not found whit id " + newTask.id_author());
+        if (authorEntity == null) throw new AuthorNotFound("Author not found whit id " + registerTask.id_author());
 
         TaskEntity taskEntity = new TaskEntity(
                 null,
-                newTask.title(),
-                newTask.description(),
+                registerTask.title(),
+                registerTask.description(),
                 null,
-                newTask.start_date(),
+                registerTask.start_date(),
                 authorEntity
         );
 
         taskRepository.save(taskEntity);
 
-        return new Task(
+        return new TaskCreateResponse(
                 taskEntity.getId(),
                 taskEntity.getTitle(),
                 taskEntity.getDescription(),
@@ -55,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task updateTask(UpdateTask updateTask) {
+    public TaskResponse updateTask(UpdateTask updateTask) {
 
         TaskEntity taskEntity = taskRepository.findTaskByIdAndIdAuthor(updateTask.id_task(), updateTask.id_author());
 
@@ -71,18 +71,17 @@ public class TaskServiceImpl implements TaskService {
 
         taskRepository.save(taskEntity);
 
-        return new Task(
+        return new TaskResponse(
                 taskEntity.getId(),
                 taskEntity.getTitle(),
                 taskEntity.getDescription(),
                 taskEntity.getStatus(),
-                taskEntity.getStartDate(),
-                new Author(taskEntity.getAuthor().getId(), taskEntity.getAuthor().getNick())
+                taskEntity.getStartDate()
         );
     }
 
     @Override
-    public Task updateStatus(UpdateStatus updateStatus) {
+    public TaskResponse updateStatus(UpdateStatus updateStatus) {
         TaskEntity taskEntity = taskRepository.findTaskByIdAndIdAuthor(updateStatus.id_task(), updateStatus.id_author());
 
         if (taskEntity == null) throw new TaskNotFound("No assignments were found with the author: " + updateStatus.id_author() + " and task: " + updateStatus.id_task());
@@ -91,54 +90,52 @@ public class TaskServiceImpl implements TaskService {
 
         taskRepository.save(taskEntity);
 
-        return new Task(
+        return new TaskResponse(
                 taskEntity.getId(),
                 taskEntity.getTitle(),
                 taskEntity.getDescription(),
                 taskEntity.getStatus(),
-                taskEntity.getStartDate(),
-                new Author(taskEntity.getAuthor().getId(), taskEntity.getAuthor().getNick())
+                taskEntity.getStartDate()
         );
     }
 
     @Override
-    public List<Task> findAll(Long id) {
+    public List<TaskResponse> findAll(Long id) {
         List<TaskEntity> taskEntities = taskRepository.findAllById(id);
 
         if (taskEntities.isEmpty()) throw new TaskNotFound("No assignments were found with the author: " + id);
 
-        List<Task> tasks = new ArrayList<>();
+        List<TaskResponse> tasks = new ArrayList<>();
 
-        taskEntities.forEach(taskEntity -> tasks.add(new Task(
+        taskEntities.forEach(taskEntity -> tasks.add(new TaskResponse(
                 taskEntity.getId(),
                 taskEntity.getTitle(),
                 taskEntity.getDescription(),
                 taskEntity.getStatus(),
-                taskEntity.getStartDate(),
-                new Author(taskEntity.getAuthor().getId(), taskEntity.getAuthor().getNick()))));
+                taskEntity.getStartDate())
+        ));
 
         return tasks;
     }
 
     @Override
-    public Task findByIdAuthor(OnlyTask onlyTask) {
+    public TaskResponse findByIdAuthor(SimpleTask onlyTask) {
 
         TaskEntity taskEntity = taskRepository.findTaskByIdAndIdAuthor(onlyTask.id_task(), onlyTask.id_author());
 
         if (taskEntity == null) throw new TaskNotFound("No assignments were found with the author: " + onlyTask.id_author() + " and task: " + onlyTask.id_task());
 
-        return new Task(
+        return new TaskResponse(
                 taskEntity.getId(),
                 taskEntity.getTitle(),
                 taskEntity.getDescription(),
                 taskEntity.getStatus(),
-                taskEntity.getStartDate(),
-                new Author(taskEntity.getAuthor().getId(), taskEntity.getAuthor().getNick())
+                taskEntity.getStartDate()
         );
     }
 
     @Override
-    public void deleteTask(OnlyTask onlyTask) {
+    public void deleteTask(SimpleTask onlyTask) {
 
         TaskEntity taskEntity = taskRepository.findTaskByIdAndIdAuthor(onlyTask.id_task(), onlyTask.id_author());
 
