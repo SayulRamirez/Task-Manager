@@ -91,6 +91,7 @@
     </dependencies>
 
     <build>
+        <finalName>API RESTFull Task Manager</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
