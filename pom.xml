@@ -14,7 +14,7 @@
     <name>Task_Manager</name>
     <description>Task_Manager</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
 
