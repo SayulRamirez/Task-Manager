@@ -49,4 +49,22 @@ public class TaskRepositoryTest {
         assertThat(task).isNotNull();
         assertThat(task.getId()).isNotZero();
     }
+
+    @Test
+    void notFoundTaskByIdAndAuthorId() {
+
+        TaskEntity task = taskRepository.findTaskByIdAndIdAuthor(1L, 2L);
+
+        assertThat(task).isNull();
+    }
+
+    @Test
+    void findTaskByIdAndAuthorId() {
+        TaskEntity taskSave = taskRepository.save(taskEntity);
+
+        TaskEntity taskFind = taskRepository.findTaskByIdAndIdAuthor(taskSave.getId(), taskSave.getAuthor().getId());
+
+        assertThat(taskFind).isNotNull();
+        assertThat(taskFind.getTitle()).isEqualTo("Tarea de prueba");
+    }
 }
