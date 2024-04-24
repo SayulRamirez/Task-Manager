@@ -67,4 +67,18 @@ public class TaskRepositoryTest {
         assertThat(taskFind).isNotNull();
         assertThat(taskFind.getTitle()).isEqualTo("Tarea de prueba");
     }
+
+    @Test
+    void updateTask() {
+
+        TaskEntity save = taskRepository.save(taskEntity);
+
+        save.setTitle("Cambiando el titulo de la tarea");
+
+        TaskEntity update = taskRepository.save(save);
+
+        assertThat(save.getId()).isEqualTo(update.getId());
+        assertThat(update.getTitle()).isEqualTo("Cambiando el titulo de la tarea");
+    }
+
 }
