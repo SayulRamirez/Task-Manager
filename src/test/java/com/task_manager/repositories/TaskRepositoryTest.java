@@ -111,4 +111,23 @@ public class TaskRepositoryTest {
         assertThat(tasks.size()).isEqualTo(2);
     }
 
+    @Test
+    void notFoundTaskByIdAndIdAuthor() {
+
+        TaskEntity task = taskRepository.findTaskByIdAndIdAuthor(2L, 8L);
+
+        assertThat(task).isNull();
+    }
+
+    @Test
+    void findTaskByIdAndIdAuthor() {
+
+        TaskEntity save = taskRepository.save(taskEntity);
+
+        TaskEntity task = taskRepository.findTaskByIdAndIdAuthor(save.getId(), save.getAuthor().getId());
+
+        assertThat(task).isNotNull();
+        assertThat(task.getId()).isEqualTo(save.getId());
+        assertThat(task.getDescription()).isEqualTo(save.getDescription());
+    }
 }
