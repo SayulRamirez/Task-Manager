@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -129,5 +130,17 @@ public class TaskRepositoryTest {
         assertThat(task).isNotNull();
         assertThat(task.getId()).isEqualTo(save.getId());
         assertThat(task.getDescription()).isEqualTo(save.getDescription());
+    }
+
+    @Test
+    void deleteTask() {
+
+        TaskEntity save = taskRepository.save(taskEntity);
+
+        taskRepository.delete(save);
+
+        Optional<TaskEntity> task = taskRepository.findById(save.getId());
+
+        assertThat(task.isEmpty()).isTrue();
     }
 }
