@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -79,6 +80,35 @@ public class TaskRepositoryTest {
 
         assertThat(save.getId()).isEqualTo(update.getId());
         assertThat(update.getTitle()).isEqualTo("Cambiando el titulo de la tarea");
+    }
+
+    @Test
+    void findAllTaskByIdAuthorIsEmpty() {
+
+        List<TaskEntity> tasks = taskRepository.findAllById(4L);
+
+        assertThat(tasks.isEmpty()).isTrue();
+    }
+
+    @Test
+    void findAllTaskByIdAuthor() {
+
+        AuthorEntity author = taskEntity.getAuthor();
+
+        TaskEntity secondTask = new TaskEntity(null,
+                "Tarea de prueba",
+                "Sobre esta tarea se realizarán todos los casos de prueba",
+                null,
+                LocalDateTime.of(2024, Month.DECEMBER, 20, 9, 12),
+                author);
+
+        taskRepository.save(taskEntity);
+        taskRepository.save(secondTask);
+
+        List<TaskEntity> tasks = taskRepository.findAllById(author.getId());
+
+        assertThat(tasks.isEmpty()).isFalse();
+        assertThat(tasks.size()).isEqualTo(2);
     }
 
 }
