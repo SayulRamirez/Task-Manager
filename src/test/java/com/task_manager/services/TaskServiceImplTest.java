@@ -6,9 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.task_manager.domain.RegisterTask;
 import com.task_manager.domain.TaskCreateResponse;
+import com.task_manager.domain.TaskResponse;
+import com.task_manager.domain.UpdateTask;
 import com.task_manager.entities.AuthorEntity;
 import com.task_manager.entities.TaskEntity;
+import com.task_manager.enums.Status;
 import com.task_manager.exceptions.AuthorNotFound;
+import com.task_manager.exceptions.TaskNotFound;
 import com.task_manager.repositories.AuthorRepository;
 import com.task_manager.repositories.TaskRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,12 +40,12 @@ public class TaskServiceImplTest {
     void setup() {
 
         entity = new TaskEntity(
-                null,
+                1L,
                 "Prueba para la capa del servicio",
                 "Esta entidad se usara para probar los tests del servicio de la tarea",
-                null,
+                Status.PENDIENTE,
                 LocalDateTime.now().plusDays(1),
-                null
+                new AuthorEntity(2L, "juan")
         );
     }
 
@@ -76,6 +80,66 @@ public class TaskServiceImplTest {
 
         assertThat(task).isNotNull();
         assertThat(task.title()).isEqualTo(register.title());
+        verify(taskRepository, times(1)).save(any(TaskEntity.class));
+    }
+
+    @Test
+    void whenUpdateTaskNotFound() {
+
+        UpdateTask updateTask = new UpdateTask(1L, "Nuevo titulo", "Creando el test cuando se falla la actualización",
+                Status.EN_PROGRESO, LocalDateTime.now().plusDays(1L), 2L);
+
+        given(taskRepository.findTaskByIdAndIdAuthor(updateTask.id_task(), updateTask.id_author())).willReturn(null);
+
+        assertThrows(TaskNotFound.class, () -> service.updateTask(updateTask));
+
+        verify(taskRepository, never()).save(any(TaskEntity.class));
+    }
+
+    @Test
+    void whenUpdateTaskDateIsEqualsToDateOrigin() {
+
+        UpdateTask updateTask = new UpdateTask(1L, "Nuevo titulo", "Creando el test cuando se falla la actualización",
+                Status.EN_PROGRESO, LocalDateTime.now().plusDays(1L), 2L);
+
+        given(taskRepository.findTaskByIdAndIdAuthor(updateTask.id_task(), updateTask.id_author())).willReturn(entity);
+
+        TaskResponse response = service.updateTask(updateTask);
+
+        assertThat(response).isNotNull();
+        assertThat(response.start_date()).isEqualTo(entity.getStartDate());
+        verify(taskRepository, times(1)).save(any(TaskEntity.class));
+    }
+
+    @Test
+    void whenUpdateTaskDateIsBeforeToDateOrigin() {
+
+        UpdateTask updateTask = new UpdateTask(1L, "Nuevo titulo", "Creando el test cuando se falla la actualización",
+                Status.EN_PROGRESO, LocalDateTime.now().minusDays(1L), 2L);
+
+        given(taskRepository.findTaskByIdAndIdAuthor(updateTask.id_task(), updateTask.id_author())).willReturn(entity);
+
+        TaskResponse response = service.updateTask(updateTask);
+
+        assertThat(response).isNotNull();
+        assertThat(response.start_date()).isEqualTo(entity.getStartDate());
+        verify(taskRepository, times(1)).save(any(TaskEntity.class));
+    }
+
+    @Test
+    void whenUpdateTaskDateIsAfterToDateOrigin() {
+
+        LocalDateTime startDate = entity.getStartDate();
+
+        UpdateTask updateTask = new UpdateTask(1L, "Nuevo titulo", "Creando el test cuando se falla la actualización",
+                Status.EN_PROGRESO, LocalDateTime.now().plusDays(3L), 2L);
+
+        given(taskRepository.findTaskByIdAndIdAuthor(updateTask.id_task(), updateTask.id_author())).willReturn(entity);
+
+        TaskResponse response = service.updateTask(updateTask);
+
+        assertThat(response).isNotNull();
+        assertThat(response.start_date()).isAfter(startDate);
         verify(taskRepository, times(1)).save(any(TaskEntity.class));
     }
 }
