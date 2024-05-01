@@ -4,10 +4,7 @@ import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.task_manager.domain.RegisterTask;
-import com.task_manager.domain.TaskCreateResponse;
-import com.task_manager.domain.TaskResponse;
-import com.task_manager.domain.UpdateTask;
+import com.task_manager.domain.*;
 import com.task_manager.entities.AuthorEntity;
 import com.task_manager.entities.TaskEntity;
 import com.task_manager.enums.Status;
@@ -141,5 +138,32 @@ public class TaskServiceImplTest {
         assertThat(response).isNotNull();
         assertThat(response.start_date()).isAfter(startDate);
         verify(taskRepository, times(1)).save(any(TaskEntity.class));
+    }
+
+    @Test
+    void whenUpdateStatusNotFoundTask() {
+
+        UpdateStatus updateStatus = new UpdateStatus(1L, 2L, Status.EN_PROGRESO);
+
+        given(taskRepository.findTaskByIdAndIdAuthor(1L, 2L)).willReturn(null);
+
+        assertThrows(TaskNotFound.class, () -> service.updateStatus(updateStatus));
+
+        verify(taskRepository, never()).save(any(TaskEntity.class));
+    }
+
+    @Test
+    void whenUpdateStatusIsSuccess() {
+
+        UpdateStatus updateStatus = new UpdateStatus(1L, 2L, Status.EN_PROGRESO);
+
+        Status status = entity.getStatus();
+
+        given(taskRepository.findTaskByIdAndIdAuthor(updateStatus.id_task(), updateStatus.id_author())).willReturn(entity);
+
+        TaskResponse response = service.updateStatus(updateStatus);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isNotEqualTo(status);
     }
 }
