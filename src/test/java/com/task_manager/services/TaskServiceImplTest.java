@@ -195,4 +195,28 @@ public class TaskServiceImplTest {
         assertThat(response.isEmpty()).isFalse();
         assertThat(response.size()).isEqualTo(2L);
     }
+
+    @Test
+    void whenFindSpecificTaskByIdAndAuthorIdNotFound() {
+
+        SimpleTask simpleTask = new SimpleTask(1L, 2L);
+
+        given(taskRepository.findTaskByIdAndIdAuthor(simpleTask.id_task(), simpleTask.id_author())).willReturn(null);
+
+        assertThrows(TaskNotFound.class, () -> service.findByIdAuthor(simpleTask));
+    }
+
+    @Test
+    void whenFindSpecificTaskByIdAndAuthorIdIsSuccess() {
+
+        SimpleTask simpleTask = new SimpleTask(1L, 2L);
+
+        given(taskRepository.findTaskByIdAndIdAuthor(simpleTask.id_task(), simpleTask.id_author())).willReturn(entity);
+
+        TaskResponse task = service.findByIdAuthor(simpleTask);
+
+        assertThat(task).isNotNull();
+        assertThat(task.id()).isEqualTo(entity.getId());
+
+    }
 }
