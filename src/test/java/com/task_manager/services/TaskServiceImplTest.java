@@ -20,6 +20,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -165,5 +168,31 @@ public class TaskServiceImplTest {
 
         assertThat(response).isNotNull();
         assertThat(response.status()).isNotEqualTo(status);
+    }
+
+    @Test
+    void whenFindAllTaskByAuthorIsEmpty() {
+
+        given(taskRepository.findAllById(1L)).willReturn(new ArrayList<>());
+
+        assertThrows(TaskNotFound.class, () -> service.findAll(1L));
+    }
+
+    @Test
+    void whenFindAllTaskByAuthorIsSuccess() {
+
+        List<TaskEntity> entities = Arrays.asList(
+                entity,
+                new TaskEntity(1L, "Segunda entidad",
+                "Esta entidad se usara para probar los tests del servicio de la tarea",
+                Status.PENDIENTE, LocalDateTime.now().plusDays(1),
+                new AuthorEntity(2L, "juan")));
+
+        given(taskRepository.findAllById(2L)).willReturn(entities);
+
+        List<TaskResponse> response = service.findAll(2L);
+
+        assertThat(response.isEmpty()).isFalse();
+        assertThat(response.size()).isEqualTo(2L);
     }
 }
