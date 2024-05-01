@@ -219,4 +219,28 @@ public class TaskServiceImplTest {
         assertThat(task.id()).isEqualTo(entity.getId());
 
     }
+
+    @Test
+    void whenNotFoundTaskToDelete() {
+
+        SimpleTask simpleTask = new SimpleTask(1L, 2L);
+
+        given(taskRepository.findTaskByIdAndIdAuthor(simpleTask.id_task(), simpleTask.id_author())).willReturn(null);
+
+        assertThrows(TaskNotFound.class, () -> service.findByIdAuthor(simpleTask));
+
+    }
+
+    @Test
+    void whenDeleteTaskIsSuccess() {
+
+        SimpleTask simpleTask = new SimpleTask(1L, 2L);
+
+        given(taskRepository.findTaskByIdAndIdAuthor(simpleTask.id_task(), simpleTask.id_author())).willReturn(entity);
+
+        service.deleteTask(simpleTask);
+
+        verify(taskRepository, times(1)).delete(any(TaskEntity.class));
+
+    }
 }
